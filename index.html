@@ -1520,6 +1520,20 @@
        ========================================================= */
     .hero-glow { border-color: transparent; }
     .hero-glow::before, .hero-glow::after { display: none; }
+    /* Erste Seite ohne Abschnitt: Hintergrund und Orbits laufen nahtlos in die Plattformen weiter */
+    .hero {
+      background: transparent;
+      overflow-x: clip;
+      overflow-y: visible;
+      z-index: 0;
+    }
+    .hero-grid {
+      -webkit-mask-image: linear-gradient(to right, black, transparent 80%), linear-gradient(to bottom, black 60%, transparent);
+      -webkit-mask-composite: source-in;
+      mask-image: linear-gradient(to right, black, transparent 80%), linear-gradient(to bottom, black 60%, transparent);
+      mask-composite: intersect;
+    }
+    .platforms.dark { background: transparent; }
     .orbit-canvas {
       position: absolute;
       left: 50%;
@@ -2527,7 +2541,7 @@
         return [C + x * c - y * s, C + x * s + y * c];
       }
       // Zentraler Stern aus dem Logo: Kugel, vertikale Linie, zwei Perlen an den Enden
-      const CORE = { r: 40, half: 250, pearl: 6 };
+      const CORE = { r: 30, half: 250, pearl: 6 };
       function drawCore(t) {
         const pulse = still ? 1 : 1 + 0.04 * Math.sin(t * 1.6);
         const top = C - CORE.half, bot = C + CORE.half;
