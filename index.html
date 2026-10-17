@@ -1544,10 +1544,12 @@
     .hero-glow::before, .hero-glow::after { display: none; }
     /* Erste Seite ohne Abschnitt: Hintergrund und Orbits laufen nahtlos in die Plattformen weiter */
     .hero {
-      /* Nebel läuft weich ins Transparente aus, damit der Übergang nahtlos bleibt */
+      /* Nebel läuft weich ins Transparente aus, damit der Übergang nahtlos bleibt.
+         Feste Radien: mit der Standardgröße wuchs der grüne Kreis auf breiten
+         Bildschirmen über die Unterkante und wurde dort gerade abgeschnitten. */
       background:
-        radial-gradient(circle at 80% 55%, rgba(25,168,102,.12), transparent 27%),
-        radial-gradient(circle at 70% 20%, rgba(40,105,220,.13), transparent 25%),
+        radial-gradient(circle 300px at 80% 55%, rgba(25,168,102,.12), transparent),
+        radial-gradient(circle 370px at 70% 20%, rgba(40,105,220,.13), transparent),
         transparent;
       overflow-x: clip;
       overflow-y: visible;
