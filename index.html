@@ -280,6 +280,12 @@
       top: 50%;
       transform: translateY(-48%);
       border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(35,93,150,.28), transparent 48%),
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,.09), transparent 2%),
+        radial-gradient(circle at 62% 42%, rgba(255,196,75,.15), transparent 2%),
+        radial-gradient(circle at 48% 65%, rgba(255,196,75,.11), transparent 2%);
+      box-shadow: 0 0 100px rgba(32,91,146,.16);
       border: 1px solid rgba(150,190,220,.12);
     }
 
@@ -297,6 +303,22 @@
       inset: 25%;
       transform: rotate(-25deg) scaleX(1.8);
     }
+
+    .network-dot {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #d8a94e;
+      box-shadow: 0 0 12px #d8a94e;
+    }
+
+    .d1 { right: 23%; top: 39%; }
+    .d2 { right: 39%; top: 57%; }
+    .d3 { right: 18%; top: 58%; }
+    .d4 { right: 31%; top: 72%; }
+    .d5 { right: 51%; top: 47%; }
+    .d6 { right: 43%; top: 30%; }
 
     .hero-content {
       position: relative;
@@ -1522,7 +1544,11 @@
     .hero-glow::before, .hero-glow::after { display: none; }
     /* Erste Seite ohne Abschnitt: Hintergrund und Orbits laufen nahtlos in die Plattformen weiter */
     .hero {
-      background: transparent;
+      /* Nebel läuft weich ins Transparente aus, damit der Übergang nahtlos bleibt */
+      background:
+        radial-gradient(circle at 80% 55%, rgba(25,168,102,.12), transparent 27%),
+        radial-gradient(circle at 70% 20%, rgba(40,105,220,.13), transparent 25%),
+        transparent;
       overflow-x: clip;
       overflow-y: visible;
       z-index: 0;
@@ -1543,6 +1569,16 @@
       transform: translate(-50%, -50%);
       pointer-events: none;
     }
+    .hero.paused .network-dot { animation-play-state: paused; }
+    .network-dot { animation: twinkle 6s ease-in-out infinite; }
+    .d2 { animation-delay: -1.2s; } .d3 { animation-delay: -2.6s; } .d4 { animation-delay: -3.4s; }
+    .d5 { animation-delay: -4.1s; } .d6 { animation-delay: -5s; }
+    @keyframes twinkle { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .network-dot { animation: none; }
+    }
+
     .grid-lights {
       position: absolute;
       inset: 0;
@@ -1708,6 +1744,12 @@
       <div class="grid-lights" aria-hidden="true"></div>
       <div class="hero-glow">
         <canvas class="orbit-canvas" aria-hidden="true"></canvas>
+        <span class="network-dot d1"></span>
+        <span class="network-dot d2"></span>
+        <span class="network-dot d3"></span>
+        <span class="network-dot d4"></span>
+        <span class="network-dot d5"></span>
+        <span class="network-dot d6"></span>
       </div>
 
       <div class="container">
