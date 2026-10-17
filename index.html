@@ -280,12 +280,6 @@
       top: 50%;
       transform: translateY(-48%);
       border-radius: 50%;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(35,93,150,.28), transparent 48%),
-        radial-gradient(circle at 35% 30%, rgba(255,255,255,.09), transparent 2%),
-        radial-gradient(circle at 62% 42%, rgba(255,196,75,.15), transparent 2%),
-        radial-gradient(circle at 48% 65%, rgba(255,196,75,.11), transparent 2%);
-      box-shadow: 0 0 100px rgba(32,91,146,.16);
       border: 1px solid rgba(150,190,220,.12);
     }
 
@@ -1544,16 +1538,31 @@
     .hero-glow::before, .hero-glow::after { display: none; }
     /* Erste Seite ohne Abschnitt: Hintergrund und Orbits laufen nahtlos in die Plattformen weiter */
     .hero {
-      /* Nebel läuft weich ins Transparente aus, damit der Übergang nahtlos bleibt.
-         Feste Radien: mit der Standardgröße wuchs der grüne Kreis auf breiten
-         Bildschirmen über die Unterkante und wurde dort gerade abgeschnitten. */
-      background:
-        radial-gradient(circle 300px at 80% 55%, rgba(25,168,102,.12), transparent),
-        radial-gradient(circle 370px at 70% 20%, rgba(40,105,220,.13), transparent),
-        transparent;
+      background: transparent;
       overflow-x: clip;
       overflow-y: visible;
       z-index: 0;
+      --nebula-x: 250px;   /* Abstand der Orbit-Mitte vom rechten Rand */
+    }
+    /* Weltall-Nebel als eigene Ebene, unabhängig von den Orbits: Die Farben
+       wechseln an keiner Orbit-Linie. Die Ebene ragt 400px unter den Hero,
+       damit kein Verlauf an dessen Unterkante abbricht. */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 -400px 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle 520px at calc(100% - var(--nebula-x)) calc(50% - 200px),
+          rgba(35,93,150,.24), rgba(35,93,150,.09) 45%, transparent),
+        radial-gradient(circle 380px at calc(100% - var(--nebula-x) + 90px) calc(50% - 150px),
+          rgba(25,168,102,.12), transparent),
+        radial-gradient(circle 420px at calc(100% - var(--nebula-x) - 160px) 180px,
+          rgba(40,105,220,.11), transparent);
+    }
+    @media (max-width: 980px) {
+      .hero { --nebula-x: 40px; }
     }
     .hero-grid {
       -webkit-mask-image: linear-gradient(to right, black, transparent 80%), linear-gradient(to bottom, black 60%, transparent);
