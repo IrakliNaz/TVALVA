@@ -75,7 +75,8 @@
       --hair: rgba(255,255,255,.1);
       --cool: 120,160,255;
       --warm: 214,189,144;
-      --sign: min(46vh, 440px);
+      --sign: min(30vw, 360px);
+      --orb: min(76vh, 720px);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -117,6 +118,7 @@
     .glow { position: absolute; top: 0; bottom: 0; width: 50%; z-index: -1; opacity: .4; transition: opacity .6s ease; pointer-events: none; }
     .glow-left  { left: 0;  background: radial-gradient(ellipse 80% 60% at 75% 50%, rgba(var(--cool),.16), transparent 70%); }
     .glow-right { right: 0; background: radial-gradient(ellipse 80% 60% at 25% 50%, rgba(var(--warm),.14), transparent 70%); }
+    .choice > .side { text-shadow: 0 1px 18px rgba(0,0,0,.85); }
     .page.hl-left  .glow-left,
     .page.hl-right .glow-right { opacity: 1; }
     .page.hl-left  .glow-right,
@@ -187,14 +189,43 @@
     .side-left:hover .go svg  { transform: scaleX(-1) translateX(3px); }
     .side-right:hover .go svg { transform: translateX(3px); }
 
-    /* ZEICHEN */
-    .sign-wrap { position: relative; z-index: 1; display: grid; justify-items: center; gap: 18px; pointer-events: none; }
-    .sign { width: var(--sign); height: var(--sign); overflow: visible; }
-    .sign .orbit { fill: none; stroke: rgba(255,255,255,.55); stroke-width: 1.1; }
-    .sign .axis { stroke: rgba(235,242,255,.85); stroke-width: 1.4; }
-    .sign .pearl { fill: #fff; }
-    .sign .dot { fill: rgba(255,255,255,.85); }
-    .sign .comet { fill: #fff; }
+    /* ORBITS UND PERLE: dieselbe Grafik wie im Hero von TVALVA Solutions */
+    .orbit-box {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--orb);
+      height: var(--orb);
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .orbit-canvas {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 130%;
+      height: 130%;
+      transform: translate(-50%, -50%);
+    }
+    .network-dot {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #d8a94e;
+      box-shadow: 0 0 12px #d8a94e;
+      animation: twinkle 6s ease-in-out infinite;
+    }
+    .d1 { right: 23%; top: 39%; }
+    .d2 { right: 39%; top: 57%; animation-delay: -1.2s; }
+    .d3 { right: 18%; top: 58%; animation-delay: -2.6s; }
+    .d4 { right: 31%; top: 72%; animation-delay: -3.4s; }
+    .d5 { right: 51%; top: 47%; animation-delay: -4.1s; }
+    .d6 { right: 43%; top: 30%; animation-delay: -5s; }
+    .orbit-box.paused .network-dot { animation-play-state: paused; }
+    @keyframes twinkle { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+    .center-col { align-self: end; justify-self: center; position: relative; z-index: 1; padding-bottom: 8px; }
     .hint { font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--faint); }
 
     /* FUSS */
@@ -215,16 +246,18 @@
 
     @media (prefers-reduced-motion: reduce) {
       .glow, .side, .go, .go svg { transition: none; }
+      .network-dot { animation: none; }
     }
 
     /* Tablet und Handy: Zeichen oben, Bereiche darunter */
     @media (max-width: 900px) {
-      :root { --sign: min(54vw, 230px); }
-      .page { overflow: visible; }
+      :root { --orb: min(86vw, 380px); }
+      .page { overflow: visible; overflow-x: clip; }
       .top { padding: calc(18px + env(safe-area-inset-top, 0px)) 20px 0; }
       .wordmark { width: 128px; }
       .choice { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 8px 16px 28px; }
-      .sign-wrap { order: -1; gap: 10px; margin-bottom: 6px; }
+      .orbit-box { position: relative; left: auto; top: auto; transform: none; order: -2; justify-self: center; margin: -10px 0 -20px; }
+      .center-col { order: -1; align-self: center; padding: 0 0 6px; }
       .side, .side-left, .side-right {
         justify-items: start;
         text-align: left;
@@ -269,48 +302,16 @@
         <span class="go"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5.5 15.5 10 11 14.5"/></svg><span data-de="Zu TVALVA Solutions" data-en="Visit TVALVA Solutions">Zu TVALVA Solutions</span></span>
       </a>
 
-      <div class="sign-wrap" aria-hidden="true">
-        <svg class="sign" id="sign" viewBox="-200 -200 400 400" focusable="false">
-          <defs>
-            <radialGradient id="ball" cx="45%" cy="47%" r="55%">
-              <stop offset="0" stop-color="#464e5c" />
-              <stop offset=".55" stop-color="#969fae" />
-              <stop offset=".86" stop-color="#ebf0fa" />
-              <stop offset="1" stop-color="#ffffff" />
-            </radialGradient>
-            <radialGradient id="halo">
-              <stop offset="0" stop-color="#c8dcff" stop-opacity=".4" />
-              <stop offset="1" stop-color="#c8dcff" stop-opacity="0" />
-            </radialGradient>
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="2.2" result="b" />
-              <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-            </filter>
-            <filter id="glow-strong" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="5" result="b" />
-              <feMerge><feMergeNode in="b" /><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-            </filter>
-          </defs>
-          <g filter="url(#glow)">
-            <g transform="rotate(-24)">
-              <ellipse class="orbit" cx="0" cy="0" rx="178" ry="60" />
-              <circle class="dot" cx="150" cy="32.3" r="2.4" />
-              <circle class="dot" cx="-60" cy="56.5" r="2.4" />
-              <circle class="dot" cx="-170" cy="-17.8" r="2.4" />
-              <circle class="dot" cx="96" cy="-50.5" r="2.4" />
-              <circle class="comet" r="3.6" filter="url(#glow-strong)">
-                <animateMotion dur="18s" repeatCount="indefinite" path="M178,0 A178,60 0 1,1 -178,0 A178,60 0 1,1 178,0" />
-              </circle>
-            </g>
-            <line class="axis" x1="0" y1="-182" x2="0" y2="182" />
-            <circle class="pearl" cx="0" cy="-182" r="5" />
-            <circle class="pearl" cx="0" cy="182" r="5" />
-          </g>
-          <circle cx="0" cy="0" r="64" fill="url(#halo)" />
-          <circle cx="0" cy="0" r="25" fill="url(#ball)" filter="url(#glow-strong)" />
-        </svg>
-        <span class="hint" data-de="Bereich wählen" data-en="Choose an area">Bereich wählen</span>
+      <div class="orbit-box" aria-hidden="true">
+        <canvas class="orbit-canvas"></canvas>
+        <span class="network-dot d1"></span>
+        <span class="network-dot d2"></span>
+        <span class="network-dot d3"></span>
+        <span class="network-dot d4"></span>
+        <span class="network-dot d5"></span>
+        <span class="network-dot d6"></span>
       </div>
+      <div class="center-col" aria-hidden="true"><span class="hint" data-de="Bereich wählen" data-en="Choose an area">Bereich wählen</span></div>
 
       <a class="side side-right" href="consulting/" data-side="right">
         <span class="kicker" data-de="Beratung &amp; Entwicklung" data-en="Consulting &amp; development">Beratung &amp; Entwicklung</span>
@@ -369,12 +370,151 @@
         el.addEventListener("blur", function () { page.classList.remove(cls); });
       });
 
-      // Bei reduzierter Bewegung steht der Komet still
-      var sign = document.getElementById("sign");
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches && sign.pauseAnimations) {
-        sign.setCurrentTime(4);
-        sign.pauseAnimations();
-      }
+      // Orbits und Perle (wie im Hero von TVALVA Solutions, ohne Beschriftungen)
+      (function heroOrbits() {
+        const cv = document.querySelector(".orbit-canvas");
+        if (!cv || !cv.getContext) return;
+        const ctx = cv.getContext("2d");
+        const hero = cv.closest(".orbit-box");
+        const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const SPACE = 720 * 1.3;              // Zeichenfläche in "Hero-Einheiten"
+        const C = SPACE / 2;
+        const orbits = [
+          { rx: 359, ry: 359, rot: 0,   spin: 0,              track: "rgba(150,190,220,.14)", comets: [{ period: 40, phase: .15 }] },
+          { rx: 424, ry: 274, rot: 24,  spin: 360 / 200,      track: "rgba(255,255,255,.08)", comets: [{ period: 40, phase: 0 }] },
+          { rx: 324, ry: 180, rot: -25, spin: -360 / 260,     track: "rgba(255,255,255,.08)", comets: [{ period: 30, phase: .37 }] }
+        ];
+        // vorgerenderter Lichtpunkt
+        const sprite = document.createElement("canvas");
+        sprite.width = sprite.height = 64;
+        const sg = sprite.getContext("2d");
+        const grd = sg.createRadialGradient(32, 32, 0, 32, 32, 32);
+        grd.addColorStop(0, "rgba(255,255,255,1)");
+        grd.addColorStop(.12, "rgba(255,255,255,.9)");
+        grd.addColorStop(.35, "rgba(200,220,255,.25)");
+        grd.addColorStop(1, "rgba(200,220,255,0)");
+        sg.fillStyle = grd; sg.fillRect(0, 0, 64, 64);
+
+        let scale = 1, running = true, visible = true;
+        // Beschriftung der Perlen: kleine Tech-Schrift, bleibt auf jedem Bildschirm gleich groß
+        const LABEL_FONT = 'ui-monospace, "SF Mono", SFMono-Regular, "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace';
+        let unit = 1;   // unit = 1 CSS-Pixel in Zeichenflächen-Einheiten
+        function size() {
+          const r = cv.getBoundingClientRect();
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          cv.width = Math.round(r.width * dpr);
+          cv.height = Math.round(r.height * dpr);
+          scale = cv.width / SPACE;
+          unit = SPACE / r.width;
+        }
+        function drawLabel(lines, hx, hy) {
+          const fs = 9.5 * unit, lh = 12 * unit, x = hx + 13 * unit, y0 = hy - lh;
+          const a = 1;   // immer sichtbar, läuft wie die Perle hinter dem Seitentext
+          ctx.font = `500 ${fs}px ${LABEL_FONT}`;
+          if ("letterSpacing" in ctx) ctx.letterSpacing = (0.6 * unit) + "px";
+          ctx.textAlign = "left";
+          ctx.textBaseline = "middle";
+          ctx.strokeStyle = `rgba(255,255,255,${0.28 * a})`;
+          ctx.lineWidth = 1 / scale;
+          ctx.beginPath(); ctx.moveTo(hx + 6 * unit, hy); ctx.lineTo(hx + 10 * unit, hy); ctx.stroke();
+          for (let i = 0; i < lines.length; i++) {
+            ctx.fillStyle = `rgba(${i ? "170,185,210" : "236,242,255"},${(i ? 0.62 : 0.92) * a})`;
+            ctx.fillText(lines[i], x, y0 + i * lh);
+          }
+          if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+        }
+        size();
+        window.addEventListener("resize", size);
+
+        function pt(o, rot, th) {
+          const x = o.rx * Math.cos(th), y = o.ry * Math.sin(th);
+          const c = Math.cos(rot), s = Math.sin(rot);
+          return [C + x * c - y * s, C + x * s + y * c];
+        }
+        // Zentraler Stern aus dem Logo: Kugel, vertikale Linie, zwei Perlen an den Enden
+        const CORE = { r: 30, half: 250, pearl: 6 };
+        function drawCore(t) {
+          const pulse = still ? 1 : 1 + 0.04 * Math.sin(t * 1.6);
+          const top = C - CORE.half, bot = C + CORE.half;
+          // Linie mit weichem Glanz
+          ctx.save();
+          ctx.shadowColor = "rgba(210,225,255,.9)";
+          ctx.shadowBlur = 8 * scale;
+          ctx.strokeStyle = "rgba(235,242,255,.7)";
+          ctx.lineWidth = 1.6 / scale * Math.max(1, scale);
+          ctx.beginPath(); ctx.moveTo(C, top); ctx.lineTo(C, bot); ctx.stroke();
+          ctx.restore();
+          // Perlen an den Enden
+          for (const y of [top, bot]) {
+            const s = 26;
+            ctx.drawImage(sprite, C - s / 2, y - s / 2, s, s);
+            ctx.fillStyle = "rgba(255,255,255,.95)";
+            ctx.beginPath(); ctx.arc(C, y, CORE.pearl, 0, Math.PI * 2); ctx.fill();
+          }
+          // Lichthof um den Stern
+          const r = CORE.r * pulse;
+          const halo = ctx.createRadialGradient(C, C, r * .6, C, C, r * 2.6);
+          halo.addColorStop(0, "rgba(200,220,255,.35)");
+          halo.addColorStop(1, "rgba(200,220,255,0)");
+          ctx.fillStyle = halo;
+          ctx.beginPath(); ctx.arc(C, C, r * 2.6, 0, Math.PI * 2); ctx.fill();
+          // Kugel: dunkler Kern, heller Rand wie im Logo
+          const ball = ctx.createRadialGradient(C - r * .1, C - r * .05, 0, C, C, r);
+          ball.addColorStop(0, "rgba(70,78,92,1)");
+          ball.addColorStop(.55, "rgba(150,160,175,1)");
+          ball.addColorStop(.85, "rgba(235,240,250,1)");
+          ball.addColorStop(1, "rgba(255,255,255,1)");
+          ctx.save();
+          ctx.shadowColor = "rgba(220,232,255,1)";
+          ctx.shadowBlur = 22 * scale;
+          ctx.fillStyle = ball;
+          ctx.beginPath(); ctx.arc(C, C, r, 0, Math.PI * 2); ctx.fill();
+          ctx.restore();
+        }
+        function draw(t) {
+          ctx.setTransform(scale, 0, 0, scale, 0, 0);
+          ctx.clearRect(0, 0, SPACE, SPACE);
+          ctx.lineCap = "round";
+          drawCore(t);
+          for (const o of orbits) {
+            const rot = (o.rot + (still ? 0 : o.spin * t)) * Math.PI / 180;
+            ctx.strokeStyle = o.track;
+            ctx.lineWidth = 1 / scale;
+            ctx.beginPath();
+            ctx.ellipse(C, C, o.rx, o.ry, rot, 0, Math.PI * 2);
+            ctx.stroke();
+            for (const cm of o.comets) {
+              const th = ((t / cm.period + cm.phase) % 1) * Math.PI * 2;
+              // Schweif
+              const N = still ? 0 : 26, len = 0.55;
+              let [px, py] = pt(o, rot, th - len);
+              for (let i = 1; i <= N; i++) {
+                const [x, y] = pt(o, rot, th - len + (len * i) / N);
+                ctx.strokeStyle = `rgba(210,225,255,${(i / N) ** 2 * 0.5})`;
+                ctx.lineWidth = (0.6 + (i / N) * 1.2) / scale * (scale > 1 ? 1 : 1.2);
+                ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(x, y); ctx.stroke();
+                px = x; py = y;
+              }
+              // Kopf
+              const [hx, hy] = pt(o, rot, th);
+              const s = 30;
+              ctx.drawImage(sprite, hx - s / 2, hy - s / 2, s, s);
+              if (cm.label) drawLabel(cm.label, hx, hy);
+            }
+          }
+        }
+        const t0 = performance.now();
+        function frame(now) {
+          if (running && visible && !document.hidden) draw((now - t0) / 1000);
+          requestAnimationFrame(frame);
+        }
+        if (still) { draw(0); window.addEventListener("resize", () => draw(0)); window.addEventListener("load", () => { size(); draw(0); }); }
+        else {
+          if (hero) new IntersectionObserver(e => { visible = e[0].isIntersecting; }).observe(hero);
+          requestAnimationFrame(frame);
+        }
+      })();
+
     })();
   </script>
 </body>
