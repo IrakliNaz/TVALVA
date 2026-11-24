@@ -19,6 +19,7 @@
   {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": "https://tvalva.com/#organization",
     "name": "TVALVA Solutions GmbH",
     "url": "https://tvalva.com/",
     "email": "info@tvalva.com",
@@ -1737,6 +1738,8 @@
       .stat strong { font-size: 23px; }
     }
 
+    .services-more { display: flex; justify-content: center; margin-top: 48px; }
+    @media (max-width: 600px) { .services-more { margin-top: 32px; } }
   </style>
 </head>
 
@@ -1775,7 +1778,7 @@
 
       <nav class="nav-links" id="navLinks" aria-label="Main">
         <a href="#home" data-en="Home" data-de="Home">Home</a>
-        <a href="#services" data-en="Services" data-de="Leistungen">Leistungen</a>
+        <a href="consulting/" data-en="Consulting" data-de="Beratung">Beratung</a>
         <a href="#platforms" data-en="Platforms" data-de="Plattformen">Plattformen</a>
         <a href="#markets" data-en="Markets" data-de="Märkte">Märkte</a>
         <a href="#about" data-en="About" data-de="Über uns">Über uns</a>
@@ -1880,6 +1883,12 @@
             <p data-en="Hosting, maintenance and continuous improvement – we stay with you after go-live." data-de="Hosting, Wartung und laufende Verbesserung – auch nach dem Go-live bleiben wir an Ihrer Seite.">Hosting, Wartung und laufende Verbesserung – auch nach dem Go-live bleiben wir an Ihrer Seite.</p>
           </div>
 
+        </div>
+
+        <div class="services-more reveal">
+          <a href="consulting/" class="btn btn-dark">
+            <span data-en="More on consulting &amp; development" data-de="Mehr zu Beratung &amp; Entwicklung">Mehr zu Beratung &amp; Entwicklung</span> <span class="arrow" aria-hidden="true">→</span>
+          </a>
         </div>
       </div>
     </section>
@@ -2089,7 +2098,7 @@
         <div class="footer-col">
           <h3 class="footer-h" data-en="Company" data-de="Unternehmen">Unternehmen</h3>
           <a href="#about" data-en="About" data-de="Über uns">Über uns</a>
-          <a href="#services" data-en="Services" data-de="Leistungen">Leistungen</a>
+          <a href="consulting/" data-en="Consulting &amp; Development" data-de="Beratung &amp; Entwicklung">Beratung &amp; Entwicklung</a>
           <a href="#markets" data-en="Markets" data-de="Märkte">Märkte</a>
           <a href="#contact" data-en="Contact" data-de="Kontakt">Kontakt</a>
         </div>
